@@ -30,7 +30,7 @@ class UserService:
 
         user = UserModel(
             email=user_schema.email.lower(),
-            **user_schema.model_dump(exclude={"email", "password"}),
+            **user_schema.model_dump(exclude={"email"}),
         )
         user.hash_password()
         await self.user_repo.create(user.model_dump(by_alias=True))

@@ -3,7 +3,7 @@ from uuid import uuid4
 from pydantic import BaseModel, Field
 from pydantic.types import UUID4
 from argon2 import PasswordHasher
-from argon2.exceptions import VerifyMismatchError
+from argon2.exceptions import VerifyMismatchError, InvalidHashError
 
 PH = PasswordHasher()
 
@@ -21,5 +21,7 @@ class UserModel(BaseModel):
         try:
             PH.verify(self.password, password)
         except VerifyMismatchError:
+            return False
+        except InvalidHashError:
             return False
         return True

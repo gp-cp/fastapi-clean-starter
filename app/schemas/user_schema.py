@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from pydantic.types import UUID4
 
 
@@ -8,7 +8,7 @@ class UserCreateSchema(BaseModel):
     password: str
 
 
-class UserSchema(BaseModel):
+class UserOutSchema(BaseModel):
     id: UUID4
     username: str
     email: str

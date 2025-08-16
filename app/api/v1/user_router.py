@@ -1,17 +1,16 @@
 from fastapi import APIRouter, Depends, status, HTTPException
-from pydantic.types import UUID4
-
+from uuid import UUID
 from app.api.dependencies import get_user_service
 from app.exceptions.user_exceptions import UserNotFound, UserAlreadyExists
-from app.schemas.user_schema import UserSchema, UserCreateSchema
+from app.schemas.user_schema import UserOutSchema, UserCreateSchema
 
 user_router = APIRouter(prefix="/users", tags=["users"])
 
 
 @user_router.get(
-    "/{user_id}", response_model=UserSchema, description="Get a single user by id."
+    "/{user_id}", response_model=UserOutSchema, description="Get a single user by id."
 )
-async def get_one(user_id: UUID4, user_service=Depends(get_user_service)):
+async def get_one(user_id: UUID, user_service=Depends(get_user_service)):
     try:
         user = await user_service.find_user_by_id(user_id=user_id)
     except UserNotFound as e:
@@ -22,7 +21,7 @@ async def get_one(user_id: UUID4, user_service=Depends(get_user_service)):
 
 
 @user_router.post(
-    "/create", response_model=UserSchema, description="Create a new user."
+    "/create", response_model=UserOutSchema, description="Create a new user."
 )
 async def create(user: UserCreateSchema, user_service=Depends(get_user_service)):
     try:
